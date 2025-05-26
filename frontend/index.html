@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Event Planner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <div class="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow">
+    <h1 class="text-3xl font-bold mb-4 text-center">🎉 AI Event Planner with Google Gemini</h1>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <input id="theme" type="text" placeholder="Theme (e.g., Wedding)" class="border p-2 rounded w-full" />
+      <input id="people" type="number" placeholder="Number of People" class="border p-2 rounded w-full" />
+      <input id="budget" type="number" placeholder="Budget in $" class="border p-2 rounded w-full" />
+    </div>
+    <div class="text-center mt-6">
+      <button onclick="generatePlan()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Generate Plan</button>
+    </div>
+    <pre id="output" class="mt-6 whitespace-pre-wrap"></pre>
+  </div>
+  <script>
+    async function generatePlan() {
+      const theme = document.getElementById('theme').value.trim();
+      const people = document.getElementById('people').value.trim();
+      const budget = document.getElementById('budget').value.trim();
+      const output = document.getElementById('output');
+
+      if (!theme || !people || !budget) {
+        output.textContent = 'Please fill all fields.';
+        return;
+      }
+
+      output.textContent = 'Generating AI event plan...';
+
+      const prompt = `
+You are a creative event planner. Provide a detailed plan for an event with:
+- Theme: ${theme}
+- Number of guests: ${people}
+- Budget: $${budget}
+
+Include venue, food, decor, entertainment, and checklist.
+      `;
+
+      try {
+        const response = await fetch('https://your-vercel-backend-url.vercel.app/api/plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt }),
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          output.textContent = 'Error: ' + data.error;
+        } else {
+          output.textContent = data.plan;
+        }
+      } catch (err) {
+        output.textContent = 'Error connecting to backend.';
+      }
+    }
+  </script>
+</body>
+</html>
