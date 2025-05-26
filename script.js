@@ -9,44 +9,47 @@ function generatePlan() {
     return;
   }
 
-  // Suggest items based on budget
-  let venue, food, decor;
+  let venue, food, decor, venueImg, foodImg, decorImg;
 
   if (budget < 100) {
     venue = "Backyard or Living Room";
-    food = "Homemade snacks, lemonade, chips";
-    decor = "DIY decorations, streamers, balloons";
+    food = "Homemade snacks";
+    decor = "DIY decorations";
+    venueImg = "https://via.placeholder.com/150?text=Backyard";
+    foodImg = "https://via.placeholder.com/150?text=Snacks";
+    decorImg = "https://via.placeholder.com/150?text=DIY+Decor";
   } else if (budget <= 500) {
     venue = "Community Center or Park";
-    food = "Pizza, finger foods, soft drinks";
-    decor = "Themed banners, tablecloths, lights";
+    food = "Pizza and drinks";
+    decor = "Colorful balloons and banners";
+    venueImg = "https://via.placeholder.com/150?text=Community+Center";
+    foodImg = "https://via.placeholder.com/150?text=Pizza";
+    decorImg = "https://via.placeholder.com/150?text=Balloons";
   } else {
-    venue = "Banquet Hall or Event Space";
-    food = "Catered meal with dessert & drinks";
-    decor = "Professional decor, floral arrangements, lighting";
+    venue = "Banquet Hall";
+    food = "Catered meal";
+    decor = "Professional setup";
+    venueImg = "https://via.placeholder.com/150?text=Banquet+Hall";
+    foodImg = "https://via.placeholder.com/150?text=Catering";
+    decorImg = "https://via.placeholder.com/150?text=Elegant+Decor";
   }
 
-  // Optional: Add theme-based highlight
   let specialNote = "";
-  if (theme.includes("birthday")) {
-    specialNote = "🎂 Include a birthday cake and party games!";
-  } else if (theme.includes("wedding")) {
-    specialNote = "💍 Add a guestbook and flower arrangements.";
-  } else if (theme.includes("beach")) {
-    specialNote = "🌴 Consider beach balls and sunscreen favors.";
-  }
+  if (theme.includes("birthday")) specialNote = "🎂 Don’t forget the birthday cake!";
+  else if (theme.includes("wedding")) specialNote = "💍 Add a guestbook and flowers.";
+  else if (theme.includes("beach")) specialNote = "🌴 Bring sunscreen and beach games.";
 
   output.innerHTML = `
     <h3>Event Plan</h3>
     <p><strong>Theme:</strong> ${theme}</p>
     <p><strong>Guests:</strong> ${people}</p>
     <p><strong>Budget:</strong> $${budget.toFixed(2)}</p>
-    <ul>
-      <li><strong>Venue:</strong> ${venue}</li>
-      <li><strong>Food:</strong> ${food}</li>
-      <li><strong>Decor:</strong> ${decor}</li>
-      <li><strong>To-do:</strong> Send invites, book venue, confirm food & decor</li>
-    </ul>
+    <div class="images">
+      <div><img src="${venueImg}" alt="Venue"><p><strong>Venue:</strong> ${venue}</p></div>
+      <div><img src="${foodImg}" alt="Food"><p><strong>Food:</strong> ${food}</p></div>
+      <div><img src="${decorImg}" alt="Decor"><p><strong>Decor:</strong> ${decor}</p></div>
+    </div>
     <p style="color: green;"><em>${specialNote}</em></p>
   `;
 }
+
