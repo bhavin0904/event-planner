@@ -10,3 +10,19 @@ body {
   padding: 20px;
   border-radius: 10px;
 }
+.images {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.images div {
+  text-align: center;
+  max-width: 150px;
+}
+.images img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
