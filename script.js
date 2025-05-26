@@ -1,55 +1,42 @@
-function generatePlan() {
-  const theme = document.getElementById('theme').value.trim().toLowerCase();
+async function generatePlan() {
+  const theme = document.getElementById('theme').value;
   const people = parseInt(document.getElementById('people').value);
   const budget = parseFloat(document.getElementById('budget').value);
   const output = document.getElementById('output');
 
-  if (!theme || isNaN(people) || people <= 0 || isNaN(budget) || budget <= 0) {
-    output.innerHTML = "<p style='color:red;'>Please enter valid theme, number of people, and budget.</p>";
+  if (!theme || !people || !budget) {
+    output.innerHTML = `<p class="text-red-500 font-semibold">Please fill in all fields.</p>`;
     return;
   }
 
-  let venue, food, decor, venueImg, foodImg, decorImg;
+  output.innerHTML = `<p class="text-gray-500">Generating plan with AI...</p>`;
 
-  if (budget < 100) {
-    venue = "Backyard or Living Room";
-    food = "Homemade snacks";
-    decor = "DIY decorations";
-    venueImg = "https://via.placeholder.com/150?text=Backyard";
-    foodImg = "https://via.placeholder.com/150?text=Snacks";
-    decorImg = "https://via.placeholder.com/150?text=DIY+Decor";
-  } else if (budget <= 500) {
-    venue = "Community Center or Park";
-    food = "Pizza and drinks";
-    decor = "Colorful balloons and banners";
-    venueImg = "https://via.placeholder.com/150?text=Community+Center";
-    foodImg = "https://via.placeholder.com/150?text=Pizza";
-    decorImg = "https://via.placeholder.com/150?text=Balloons";
-  } else {
-    venue = "Banquet Hall";
-    food = "Catered meal";
-    decor = "Professional setup";
-    venueImg = "https://via.placeholder.com/150?text=Banquet+Hall";
-    foodImg = "https://via.placeholder.com/150?text=Catering";
-    decorImg = "https://via.placeholder.com/150?text=Elegant+Decor";
+  try {
+    const plan = await getAIPlan(theme, people, budget);
+
+    output.innerHTML = `
+      <h3 class="text-xl font-bold mb-2">📝 Event Plan</h3>
+      <p><strong>Theme:</strong> ${theme}</p>
+      <p><strong>Guests:</strong> ${people}</p>
+      <p><strong>Budget:</strong> $${budget}</p>
+      <ul class="list-disc ml-6 mt-2 space-y-1">
+        ${plan.map(item => `<li>${item}</li>`).join("")}
+      </ul>
+    `;
+  } catch (err) {
+    output.innerHTML = `<p class="text-red-500">Error generating plan: ${err.message}</p>`;
   }
-
-  let specialNote = "";
-  if (theme.includes("birthday")) specialNote = "🎂 Don’t forget the birthday cake!";
-  else if (theme.includes("wedding")) specialNote = "💍 Add a guestbook and flowers.";
-  else if (theme.includes("beach")) specialNote = "🌴 Bring sunscreen and beach games.";
-
-  output.innerHTML = `
-    <h3>Event Plan</h3>
-    <p><strong>Theme:</strong> ${theme}</p>
-    <p><strong>Guests:</strong> ${people}</p>
-    <p><strong>Budget:</strong> $${budget.toFixed(2)}</p>
-    <div class="images">
-      <div><img src="${venueImg}" alt="Venue"><p><strong>Venue:</strong> ${venue}</p></div>
-      <div><img src="${foodImg}" alt="Food"><p><strong>Food:</strong> ${food}</p></div>
-      <div><img src="${decorImg}" alt="Decor"><p><strong>Decor:</strong> ${decor}</p></div>
-    </div>
-    <p style="color: green;"><em>${specialNote}</em></p>
-  `;
 }
 
+async function getAIPlan(theme, people, budget) {
+  // Simulate an AI response
+  const suggestions = [
+    `Venue: Book a local venue suitable for ${people} guests (like a park or small hall).`,
+    `Food: Cater basic ${theme}-themed meals within budget.`,
+    `Entertainment: Add music/DJ or theme games.`,
+    `Decor: Use DIY decorations matching ${theme}.`,
+    `Tasks: Send invites, order food, arrange seating, prep music.`
+  ];
+  // Shuffle for variety (mock AI randomness)
+  return suggestions.sort(() => 0.5 - Math.random()).slice(0, 5);
+}
